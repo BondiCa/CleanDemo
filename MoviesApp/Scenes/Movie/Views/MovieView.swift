@@ -44,7 +44,9 @@ final class MovieView: UIView {
 }
 
 extension MovieView {
+
 	private func setupUI() {
+		backgroundColor = .white
 		addSubview(movieImageView)
 		addSubview(descriptionTextView)
 		addSubview(ratingLabel)
@@ -54,7 +56,8 @@ extension MovieView {
 	private func constrainUI() {
 		movieImageView.snp.makeConstraints {
 			$0.width.equalToSuperview().multipliedBy(0.8)
-			$0.centerX.top.equalToSuperview()
+			$0.centerX.equalToSuperview()
+			$0.top.equalTo(safeAreaLayoutGuide).offset(20)
 			$0.height.equalTo(movieImageView.snp.width).multipliedBy(0.8)
 		}
 
@@ -73,11 +76,11 @@ extension MovieView {
 
 	}
 
-	func configureWith(imagePath: String?, description: String?, rating: Double) {
+	func configureWith(imagePath: String?, description: String?, rating: Double?) {
 		if let imagePath = imagePath, let url = URL(string: imagePath) {
 			movieImageView.kf.setImage(with: url)
 		}
 		descriptionTextView.text = description
-		ratingLabel.text = "Rating: \(rating)"
+		ratingLabel.text = "Rating: \(rating ?? 0)"
 	}
 }

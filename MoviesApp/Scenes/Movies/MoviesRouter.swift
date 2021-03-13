@@ -26,6 +26,7 @@ extension MoviesRouter: MoviesRoutingLogic {
 		if let movies = viewController?.interactor?.movies, indexPath.row < movies.count {
 
 			let movieViewController = MovieViewController()
+			movieViewController.movie = movies[indexPath.row]
 			viewController?.navigationController?.pushViewController(movieViewController, animated: true)
 		}
 

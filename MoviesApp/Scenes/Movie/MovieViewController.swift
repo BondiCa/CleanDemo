@@ -7,15 +7,12 @@
 
 import UIKit
 
-protocol MovieDisplayLogic {
-}
-
 final class MovieViewController: UIViewController {
 
 	let contentView = MovieView()
-	var interactor: MovieDisplayLogic?
 
 	var movie: Movie?
+
 	init() {
 		super.init(nibName: nil, bundle: nil)
 
@@ -32,6 +29,7 @@ final class MovieViewController: UIViewController {
 	override func viewDidLoad() {
 		super.viewDidLoad()
 		setupTitle()
+		setupView()
 	}
 }
 
@@ -42,8 +40,11 @@ extension MovieViewController {
 			title = movieTitle
 		}
 	}
-}
 
-extension MovieViewController {
-
+	private func setupView() {
+		guard let movie = movie else {
+			return
+		}
+		contentView.configureWith(imagePath: movie.imagePath, description: movie.overview, rating: movie.rating)
+	}
 }
