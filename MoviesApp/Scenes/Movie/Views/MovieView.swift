@@ -1,0 +1,83 @@
+//
+//  MovieView.swift
+//  MoviesApp
+//
+//  Created by Amila Fejzic on 13. 3. 2021..
+//
+
+import UIKit
+import SnapKit
+import Kingfisher
+
+final class MovieView: UIView {
+	private let movieImageView: UIImageView = {
+		let view = UIImageView(frame: .zero)
+		return view
+	}()
+
+	private let descriptionTextView: UITextView = {
+		let label = UITextView(frame: .zero)
+		label.textColor = .red
+		return label
+	}()
+
+	private let ratingLabel: UILabel = {
+		let label = UILabel(frame: .zero)
+		label.textColor = .red
+		label.numberOfLines = 0
+		label.textAlignment = .center
+		return label
+	}()
+
+	override init(frame: CGRect) {
+		super.init(frame: frame)
+		setupUI()
+		constrainUI()
+	}
+
+	required init?(coder: NSCoder) {
+		super.init(coder: coder)
+		setupUI()
+		constrainUI()
+	}
+
+}
+
+extension MovieView {
+	private func setupUI() {
+		addSubview(movieImageView)
+		addSubview(descriptionTextView)
+		addSubview(ratingLabel)
+
+	}
+
+	private func constrainUI() {
+		movieImageView.snp.makeConstraints {
+			$0.width.equalToSuperview().multipliedBy(0.8)
+			$0.centerX.top.equalToSuperview()
+			$0.height.equalTo(movieImageView.snp.width).multipliedBy(0.8)
+		}
+
+		ratingLabel.snp.makeConstraints {
+			$0.width.equalToSuperview().multipliedBy(0.8)
+			$0.centerX.equalToSuperview()
+			$0.bottom.equalToSuperview().offset(-32)
+		}
+
+		descriptionTextView.snp.makeConstraints {
+			$0.width.equalToSuperview().multipliedBy(0.8)
+			$0.centerX.equalToSuperview()
+			$0.bottom.equalTo(ratingLabel.snp.top).offset(-20)
+			$0.top.equalTo(movieImageView.snp.bottom).offset(20)
+		}
+
+	}
+
+	func configureWith(imagePath: String?, description: String?, rating: Double) {
+		if let imagePath = imagePath, let url = URL(string: imagePath) {
+			movieImageView.kf.setImage(with: url)
+		}
+		descriptionTextView.text = description
+		ratingLabel.text = "Rating: \(rating)"
+	}
+}
