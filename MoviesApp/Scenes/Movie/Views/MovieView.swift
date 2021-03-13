@@ -12,6 +12,7 @@ import Kingfisher
 final class MovieView: UIView {
 	private let movieImageView: UIImageView = {
 		let view = UIImageView(frame: .zero)
+		view.contentMode = .scaleAspectFit
 		return view
 	}()
 
