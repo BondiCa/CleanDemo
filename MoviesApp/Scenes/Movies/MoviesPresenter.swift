@@ -7,30 +7,23 @@
 
 import Foundation
 
-protocol MoviesPresentationLogic {
-	func displayMovies(_ viewModels: [MovieViewModel])
-	func displayError()
+protocol MoviesPresentationLogic: AnyObject {
+	func presentMovies(_ movies: [Movie])
+	func presentError(_ error: Error)
 }
 
 final class MoviesPresenter {
-	var output: MoviesPresentationLogic?
-
-	init(output: MoviesPresentationLogic) {
-		self.output = output
-	}
+	weak var viewController: MoviesDisplayLogic?
 }
 
-extension MoviesPresenter: MoviesBusinessLogic {
+extension MoviesPresenter: MoviesPresentationLogic {
+
 	func presentMovies(_ movies: [Movie]) {
-		let viewModels = movies.compactMap { movie -> MovieViewModel in
-
-			return MovieViewModel(title: movie.title, imageURL: movie.imagePath)
-		}
-
-		output?.displayMovies(viewModels)
+		let viewModels = movies.map { MovieViewModel(title: $0.title, imageURL: $0.imagePath) }
+		viewController?.displayMovies(viewModels)
 	}
 
 	func presentError(_ error: Error) {
-		output?.displayError()
+		viewController?.displayError(with: "Failed to get movies", message: error.localizedDescription)
 	}
 }

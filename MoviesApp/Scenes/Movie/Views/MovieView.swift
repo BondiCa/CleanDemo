@@ -41,7 +41,6 @@ final class MovieView: UIView {
 		setupUI()
 		constrainUI()
 	}
-
 }
 
 extension MovieView {
@@ -51,7 +50,6 @@ extension MovieView {
 		addSubview(movieImageView)
 		addSubview(descriptionTextView)
 		addSubview(ratingLabel)
-
 	}
 
 	private func constrainUI() {
@@ -74,7 +72,6 @@ extension MovieView {
 			$0.bottom.equalTo(ratingLabel.snp.top).offset(-20)
 			$0.top.equalTo(movieImageView.snp.bottom).offset(20)
 		}
-
 	}
 
 	func configureWith(imagePath: String?, description: String?, rating: Double?) {

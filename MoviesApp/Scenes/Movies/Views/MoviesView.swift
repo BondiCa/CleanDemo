@@ -19,7 +19,8 @@ final class MoviesView: UIView {
 		view.separatorStyle = .singleLine
 		view.separatorColor = .red
 		view.showsVerticalScrollIndicator = false
-		view.register(MovieCellView.self, forCellReuseIdentifier: MovieCellView.reuseIdentifier)
+		view.rowHeight = UITableView.automaticDimension
+		view.register(MovieCell.self, forCellReuseIdentifier: MovieCell.identifier)
 		return view
 	}()
 
@@ -60,7 +61,6 @@ final class MoviesView: UIView {
 	func endRefreshing() {
 		refreshControl.endRefreshing()
 	}
-
 }
 
 extension MoviesView {

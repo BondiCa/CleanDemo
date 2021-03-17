@@ -12,12 +12,10 @@ final class MoviesWorker {
 	struct MoviesWrapper: Codable {
 		let results: [Movie]
 	}
+
 	let networkClient: Network
-	init?() {
-		guard let network = Network(with: "https://api.themoviedb.org/3/") else {
-			return nil
-		}
-		networkClient = network
+	init(with network: Network = Network(with: "https://api.themoviedb.org/3/")) {
+		self.networkClient = network
 	}
 
 	func fetchMovies(for page: Int, completion: @escaping (Result<[Movie], Error>) -> Void) {

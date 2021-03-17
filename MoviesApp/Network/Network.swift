@@ -10,15 +10,11 @@ import Foundation
 final class Network {
 	private let queue = OperationQueue()
 
-	let baseURL: URL
+	let baseURL: URL?
 	let apiKey = "09bc478f584c74b8a540079f46168ffa"
-	init?(with baseURLString: String) {
-		guard let url = URL(string: baseURLString) else {
-			return nil
-		}
-		self.baseURL = url
+	init(with baseURLString: String) {
+		self.baseURL = URL(string: baseURLString)
 		queue.maxConcurrentOperationCount = 1
-
 	}
 }
 
@@ -48,8 +44,9 @@ extension Network {
 	}
 
 	private func createURLRequest(method: HttpMethod, path: String, queryParams: [URLQueryItem]?, body: Data?) -> URLRequest {
-		var url = baseURL
-
+		guard var url = baseURL else {
+			fatalError()
+		}
 		url.appendPathComponent(path)
 
 		var params = [URLQueryItem(name: "api_key", value: apiKey)]

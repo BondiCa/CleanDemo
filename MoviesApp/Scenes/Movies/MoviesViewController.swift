@@ -7,26 +7,27 @@
 
 import UIKit
 
-protocol MoviesDisplayLogic {
-	var movies: [Movie]? { get }
-
-	func fetchMovies(for page: Int)
+protocol MoviesDisplayLogic: AnyObject {
+	func displayMovies(_ movies: [MovieViewModel])
+	func displayError(with title: String, message: String?)
 }
 
 final class MoviesViewController: UIViewController {
 
 	let contentView = MoviesView()
-	var interactor: MoviesDisplayLogic?
+	let dataSource = MoviesDataSource()
+	var interactor: MoviesBusinessLogic?
 	var router: MoviesRoutingLogic?
 
-	var moviesViewModels: [MovieViewModel] = []
-
-	init() {
+	init(moviesRouterDelegate: MoviesRouterDelegate? = nil) {
 		super.init(nibName: nil, bundle: nil)
-		let router = MoviesRouter(with: self)
-		let presenter = MoviesPresenter(output: self)
-		let interactor = MoviesInteractor(output: presenter)
-
+		let presenter = MoviesPresenter()
+		presenter.viewController = self
+		let interactor = MoviesInteractor()
+		interactor.presenter = presenter
+		let router = MoviesRouter()
+		router.viewController = self
+		router.delegate = moviesRouterDelegate
 		self.interactor = interactor
 		self.router = router
 	}
@@ -37,7 +38,7 @@ final class MoviesViewController: UIViewController {
 
 	override func loadView() {
 		contentView.delegate = self
-		contentView.dataSource = self
+		contentView.dataSource = dataSource
 		view = contentView
 	}
 
@@ -47,58 +48,39 @@ final class MoviesViewController: UIViewController {
 	}
 
 	private func fetchMovies() {
-		interactor?.fetchMovies(for: 1)
-	}
-}
-
-extension MoviesViewController: UITableViewDataSource {
-
-	func numberOfSections(in tableView: UITableView) -> Int {
-		1
-	}
-
-	func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-		moviesViewModels.count
-	}
-
-	func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-
-		let cell = tableView.dequeueReusableCell(withIdentifier: MovieCellView.reuseIdentifier, for: indexPath)
-
-		if let cell = cell as? MovieCellView {
-			cell.configureWith(imagePath: moviesViewModels[indexPath.row].imageURL, title: moviesViewModels[indexPath.row].title)
-		}
-		return cell
+		interactor?.fetchMovies()
 	}
 }
 
 extension MoviesViewController: UITableViewDelegate {
 
 	func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+		router?.navigateToMovie()
+	}
 
-		router?.navigateToMovie(at: indexPath)
+	func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+		150
 	}
 }
 
-extension MoviesViewController: MoviesPresentationLogic {
-	func displayMovies(_ viewModels: [MovieViewModel]) {
-		moviesViewModels = viewModels
+extension MoviesViewController: MoviesDisplayLogic {
+
+	func displayMovies(_ movies: [MovieViewModel]) {
+		dataSource.updateMovies(movies)
 		contentView.reloadTable()
-		contentView.endRefreshing()
 	}
 
-	func displayError() {
-		let alert = UIAlertController(title: "Error", message: "Error happened", preferredStyle: .actionSheet)
+	func displayError(with title: String, message: String?) {
+		let alert = UIAlertController(title: title, message: message, preferredStyle: .actionSheet)
 		alert.addAction(UIAlertAction(title: "Cancel", style: .cancel, handler: nil))
 
 		self.present(alert, animated: true, completion: nil)
 	}
-
 }
 
 extension MoviesViewController: MoviesViewDelegate {
+
 	func didRefresh() {
 		fetchMovies()
 	}
-
 }

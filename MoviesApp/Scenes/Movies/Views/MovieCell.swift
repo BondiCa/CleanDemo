@@ -9,8 +9,7 @@ import UIKit
 import SnapKit
 import Kingfisher
 
-final class MovieCellView: UITableViewCell {
-	static let reuseIdentifier = "MovieCellView"
+final class MovieCell: UITableViewCell {
 
 	private let movieImageView: UIImageView = {
 		let view = UIImageView(frame: .zero)
@@ -46,11 +45,10 @@ final class MovieCellView: UITableViewCell {
 		movieImageView.snp.makeConstraints {
 			$0.leading.top.bottom.equalToSuperview()
 			$0.width.equalToSuperview().multipliedBy(0.5)
-			$0.height.equalTo(movieImageView.snp.width)
 		}
 
 		titleLabel.snp.makeConstraints {
-			$0.centerY.equalToSuperview()
+			$0.centerY.equalTo(movieImageView)
 			$0.leading.equalTo(movieImageView.snp.trailing).offset(30)
 			$0.trailing.equalToSuperview().offset(-24)
 		}

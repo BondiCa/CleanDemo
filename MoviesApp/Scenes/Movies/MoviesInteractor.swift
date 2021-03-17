@@ -8,36 +8,32 @@
 import UIKit
 
 protocol MoviesBusinessLogic {
-	func presentMovies(_ movies: [Movie])
-	func presentError(_ error: Error)
+
+	func fetchMovies()
 }
 
 final class MoviesInteractor {
 
-	let worker: MoviesWorker?
-	let output: MoviesBusinessLogic
+	private let worker: MoviesWorker
+	var presenter: MoviesPresentationLogic?
 
-	var movies: [Movie]?
-
-	init(output: MoviesBusinessLogic) {
-		self.worker = MoviesWorker()
-		self.output = output
+	init(movieWorker: MoviesWorker = MoviesWorker()) {
+		self.worker = movieWorker
 	}
 }
 
-extension MoviesInteractor: MoviesDisplayLogic {
+extension MoviesInteractor: MoviesBusinessLogic {
 
-	func fetchMovies(for page: Int) {
-		worker?.fetchMovies(for: page) { [weak self] result in
+	func fetchMovies() {
+		worker.fetchMovies(for: 1) { [weak self] result in
 			guard let self = self else {
 				return
 			}
 			switch result {
 			case .success(let movies):
-				self.movies = movies
-				self.output.presentMovies(movies)
+				self.presenter?.presentMovies(movies)
 			case .failure(let error):
-				self.output.presentError(error)
+				self.presenter?.presentError(error)
 			}
 		}
 	}

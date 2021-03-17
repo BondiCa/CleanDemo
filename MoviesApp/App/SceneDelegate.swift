@@ -19,7 +19,9 @@ class SceneDelegate: UIResponder, UIWindowSceneDelegate {
 
 		window = UIWindow(windowScene: windowScene)
 		window?.backgroundColor = .white
+
 		let viewController = MoviesViewController()
+
 		window?.rootViewController = UINavigationController(rootViewController: viewController)
 
 	}
