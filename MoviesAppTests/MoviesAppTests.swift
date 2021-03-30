@@ -8,26 +8,36 @@
 import XCTest
 @testable import MoviesApp
 
-class MoviesAppTests: XCTestCase {
+class MoviesPresenterTests: XCTestCase {
 
-    override func setUpWithError() throws {
-        // Put setup code here. This method is called before the invocation of each test method in the class.
+    let moviesPresenter = MoviesPresenter()
+    let mockViewController = MockViewController()
+    
+    override func setUp() {
+        super.setUp()
+        moviesPresenter.viewController = mockViewController
     }
-
-    override func tearDownWithError() throws {
-        // Put teardown code here. This method is called after the invocation of each test method in the class.
+    
+    func test_present_movies() {
+        moviesPresenter.presentMovies([])
+        XCTAssert(mockViewController.isDisplayMoviesCalled)
     }
+}
 
-    func testExample() throws {
-        // This is an example of a functional test case.
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
+class MockViewController: MoviesDisplayLogic {
+    var isDisplayMoviesCalled: Bool = false
+    var isDisplayErrorCalled: Bool = false
+
+    func displayMovies(_ movies: [MovieViewModel]) {
+        isDisplayMoviesCalled = true
     }
-
-    func testPerformanceExample() throws {
-        // This is an example of a performance test case.
-        self.measure {
-            // Put the code you want to measure the time of here.
-        }
+    
+    func displayError(with title: String, message: String?) {
+        isDisplayErrorCalled = true
     }
-
+    
+    func reset() {
+        isDisplayMoviesCalled = false
+        isDisplayErrorCalled = false
+    }
 }

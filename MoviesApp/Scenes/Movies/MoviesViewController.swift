@@ -60,7 +60,7 @@ extension MoviesViewController: UITableViewDelegate {
         
         switch selectedRow {
         case let .movie(viewModel):
-            router?.navigateToMovie(movie: viewModel)
+            router?.navigateToMovie(movieViewModel: viewModel)
         default:
             return
         }
