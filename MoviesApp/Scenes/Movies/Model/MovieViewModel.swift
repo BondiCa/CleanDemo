@@ -10,4 +10,5 @@ import Foundation
 struct MovieViewModel {
 	let title: String
 	let imageURL: String?
+    let rating: Double?
 }

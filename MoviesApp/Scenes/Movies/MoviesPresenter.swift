@@ -19,7 +19,7 @@ final class MoviesPresenter {
 extension MoviesPresenter: MoviesPresentationLogic {
 
 	func presentMovies(_ movies: [Movie]) {
-		let viewModels = movies.map { MovieViewModel(title: $0.title, imageURL: $0.imagePath) }
+        let viewModels = movies.map { MovieViewModel(title: $0.title, imageURL: $0.imagePath, rating: $0.rating) }
 		viewController?.displayMovies(viewModels)
 	}
 

@@ -10,12 +10,11 @@ import UIKit
 final class MovieViewController: UIViewController {
 
 	let contentView = MovieView()
+	var movieViewModel: MovieViewModel?
 
-	var movie: Movie?
-
-	init() {
+    init(movieViewModel: MovieViewModel) {
 		super.init(nibName: nil, bundle: nil)
-
+        self.movieViewModel = movieViewModel
 	}
 
 	required init?(coder: NSCoder) {
@@ -36,15 +35,17 @@ final class MovieViewController: UIViewController {
 extension MovieViewController {
 
 	private func setupTitle() {
-		if let movieTitle = movie?.title {
+        if let movieTitle = movieViewModel?.title {
 			title = movieTitle
 		}
 	}
 
 	private func setupView() {
-		guard let movie = movie else {
+		guard let movieViewModel = movieViewModel else {
 			return
 		}
-		contentView.configureWith(imagePath: movie.imagePath, description: movie.overview, rating: movie.rating)
+        contentView.configureWith(imagePath: movieViewModel.imageURL,
+                                  description: movieViewModel.title,
+                                  rating: movieViewModel.rating)
 	}
 }
