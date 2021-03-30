@@ -6,9 +6,11 @@
 //
 
 import Foundation
+import UIKit
+
 
 protocol MoviesRoutingLogic {
-	func navigateToMovie()
+    func navigateToMovie(movie: MovieViewModel)
 }
 
 protocol MoviesRouterDelegate: AnyObject {
@@ -21,7 +23,11 @@ final class MoviesRouter {
 }
 
 extension MoviesRouter: MoviesRoutingLogic {
-
-	func navigateToMovie() {
+    
+    func navigateToMovie(movie: MovieViewModel) {
+        
+        let vc = MovieDetailsViewController()
+        
+        viewController?.navigationController?.pushViewController(vc, animated: true)
 	}
 }
