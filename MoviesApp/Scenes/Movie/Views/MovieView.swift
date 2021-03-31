@@ -29,6 +29,16 @@ final class MovieView: UIView {
 		label.textAlignment = .center
 		return label
 	}()
+    
+    private let button: UIButton = {
+       
+        let button = UIButton(type: .system)
+        button.setTitle("Klikni me!", for: .normal)
+        button.titleLabel?.font = UIFont.boldSystemFont(ofSize: 20)
+        button.addTarget(self, action: #selector(MovieViewController.didSelectButton), for: .touchUpInside)
+        button.layer.cornerRadius = 5
+        return button
+    }()
 
 	override init(frame: CGRect) {
 		super.init(frame: frame)
@@ -50,6 +60,7 @@ extension MovieView {
 		addSubview(movieImageView)
 		addSubview(descriptionTextView)
 		addSubview(ratingLabel)
+        addSubview(button)
 	}
 
 	private func constrainUI() {
@@ -72,7 +83,14 @@ extension MovieView {
 			$0.bottom.equalTo(ratingLabel.snp.top).offset(-20)
 			$0.top.equalTo(movieImageView.snp.bottom).offset(20)
 		}
-	}
+        button.snp.makeConstraints {
+            
+            $0.width.height.equalTo(100)
+            $0.bottom.equalToSuperview().offset(10)
+            $0.right.equalToSuperview().offset(-10)
+        }
+        
+    }
 
 	func configureWith(imagePath: String?, description: String?, rating: Double?) {
 		if let imagePath = imagePath, let url = URL(string: imagePath) {
@@ -81,4 +99,8 @@ extension MovieView {
 		descriptionTextView.text = description
 		ratingLabel.text = "Rating: \(rating ?? 0)"
 	}
+    
+    //MARK: - Selectors
+    
+    
 }

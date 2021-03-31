@@ -48,4 +48,17 @@ extension MovieViewController {
                                   description: movieViewModel.title,
                                   rating: movieViewModel.rating)
 	}
+    
+    @objc func didSelectButton() {
+        let alert = UIAlertController(title: "OBAVEŠTENJE", message: "Vladimir je car", preferredStyle: .alert)
+
+        let confirmAction = UIAlertAction(title: "Potvrdjujem", style: .default) { (UIAlertAction) in
+            alert.dismiss(animated: true, completion: nil)
+        }
+
+        alert.addAction(confirmAction)
+   
+        present(alert, animated: true, completion: nil)
+  
+    }
 }
