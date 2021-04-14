@@ -9,7 +9,7 @@ import UIKit
 
 protocol MoviesBusinessLogic {
 	func fetchMovies()
-}
+    }
 
 final class MoviesInteractor {
 
@@ -22,6 +22,8 @@ final class MoviesInteractor {
 }
 
 extension MoviesInteractor: MoviesBusinessLogic {
+    
+    
 	func fetchMovies() {
 		worker.fetchMovies(for: 1) { [weak self] result in
 			guard let self = self else {
@@ -35,4 +37,6 @@ extension MoviesInteractor: MoviesBusinessLogic {
 			}
 		}
 	}
+    
+   
 }

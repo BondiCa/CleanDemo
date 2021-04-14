@@ -26,4 +26,9 @@ extension MoviesPresenter: MoviesPresentationLogic {
 	func presentError(_ error: Error) {
 		viewController?.displayError(with: "Failed to get movies", message: error.localizedDescription)
 	}
+    
+    func presentAlert() {
+        
+    }
+  
 }

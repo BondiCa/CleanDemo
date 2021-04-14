@@ -7,58 +7,65 @@
 
 import UIKit
 
-final class MovieViewController: UIViewController {
-
-	let contentView = MovieView()
-	var movieViewModel: MovieViewModel?
-
-    init(movieViewModel: MovieViewModel) {
-		super.init(nibName: nil, bundle: nil)
-        self.movieViewModel = movieViewModel
-	}
-
-	required init?(coder: NSCoder) {
-		fatalError("init(coder:) has not been implemented")
-	}
-
-	override func loadView() {
-		view = contentView
-	}
-
-	override func viewDidLoad() {
-		super.viewDidLoad()
-		setupTitle()
-		setupView()
-	}
+protocol MovieDisplayLogic: AnyObject {
+    func didTapButton()
 }
 
-extension MovieViewController {
+final class MovieViewController: UIViewController {
+    
+    let contentView = MovieView()
+    var movieViewModel: MovieViewModel?
+    
+    
+    init(movieViewModel: MovieViewModel) {
+        super.init(nibName: nil, bundle: nil)
+        self.movieViewModel = movieViewModel  
+    }
+    
+    required init?(coder: NSCoder) {
+        fatalError("init(coder:) has not been implemented")
+    }
+    
+    override func loadView() {
+        view = contentView
+    }
+    
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        setupTitle()
+        setupView()
+    }
+}
 
-	private func setupTitle() {
+private extension MovieViewController {
+    
+    func setupTitle() {
         if let movieTitle = movieViewModel?.title {
-			title = movieTitle
-		}
-	}
-
-	private func setupView() {
-		guard let movieViewModel = movieViewModel else {
-			return
-		}
+            title = movieTitle
+        }
+    }
+    
+    func setupView() {
+        guard let movieViewModel = movieViewModel else {
+            return
+        }
         contentView.configureWith(imagePath: movieViewModel.imageURL,
                                   description: movieViewModel.title,
                                   rating: movieViewModel.rating)
-	}
+        contentView.alertButton.addTarget(self, action: #selector(didTapButton), for: .touchUpInside)
+    }
     
-    @objc func didSelectButton() {
+    @objc func didTapButton() {
         let alert = UIAlertController(title: "OBAVEŠTENJE", message: "Vladimir je car", preferredStyle: .alert)
-
         let confirmAction = UIAlertAction(title: "Potvrdjujem", style: .default) { (UIAlertAction) in
             alert.dismiss(animated: true, completion: nil)
         }
-
         alert.addAction(confirmAction)
-   
         present(alert, animated: true, completion: nil)
-  
     }
+    
 }
+
+
+
+
